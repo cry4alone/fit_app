@@ -1,21 +1,20 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Image } from 'expo-image';
 import Calendar from '@/components/Calendar';
 import { Link } from 'expo-router';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import ProgressBar from '@/components/ProgressBar';
 import { AccountInfo } from '@/components/AccountInfo';
+import ProgressBar from '@/components/ProgressBar';
 import { Stats } from '@/components/Stats';
+import { useUserProgress } from '@/hooks/useUserProgress';
 export default function HomeScreen() {
-    const currentXP = 450;
+    const { addXp, xp, level, achievements } = useUserProgress();
     const xpToNextLevel = 1000;
-    const progress = currentXP / xpToNextLevel;
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
             <View style={styles.container}>
-                <AccountInfo></AccountInfo>
+                <AccountInfo level={level}></AccountInfo>
 
                 <View style={styles.recommendationCard}>
                     <Text style={styles.recommendationText}>Совет дня: Добавь в рацион больше зелени и воды!</Text>
@@ -25,14 +24,10 @@ export default function HomeScreen() {
 
                 <View style={styles.progressCard}>
                     <Text style={styles.cardTitle}>Опыт</Text>
-                    <Text style={styles.xpText}>
-                        {currentXP} / {xpToNextLevel}
-                    </Text>
-                    <ProgressBar progress={progress} />
-                    <TouchableOpacity style={styles.addAction}>
-                        <Link href='/add-activity' asChild>
-                            <Text style={styles.addActionText}>+ Добавить активность</Text>
-                        </Link>
+                    <Text style={styles.xpText}>{xp}</Text>
+                    <ProgressBar progress={xp / xpToNextLevel} />
+                    <TouchableOpacity style={styles.addAction} onPress={() => addXp(100)}>
+                        <Text style={styles.addActionText}>+ Добавить активность</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -40,15 +35,11 @@ export default function HomeScreen() {
 
                 <View style={styles.achievementsContainer}>
                     <Text style={styles.sectionTitle}>Твои достижения</Text>
-                    <View style={styles.achievementItem}>
-                        <Text>🏆 Первые шаги — 1000 шагов за день</Text>
-                    </View>
-                    <View style={styles.achievementItem}>
-                        <Text>🔥 Активность 5 дней подряд</Text>
-                    </View>
-                    <View style={styles.achievementItem}>
-                        <Text>🏅 Начальный уровень завершён</Text>
-                    </View>
+                    {achievements.map((achievement, index) => (
+                        <View key={index} style={styles.achievementItem}>
+                            <Text>🏆 {achievement}</Text>
+                        </View>
+                    ))}
                 </View>
 
                 <Link href='/achievements' asChild>

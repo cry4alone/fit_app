@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 
-export const AccountInfo = () => {
-
-    const userLevel = 3;
+interface AccountInfoProps {
+    level: number;
+}
+export const AccountInfo: React.FC<AccountInfoProps> = ({ level }) => {
     const userName = 'Andrey';
 
     return (
@@ -19,7 +20,7 @@ export const AccountInfo = () => {
                 />
                 <View style={styles.headerText}>
                     <Text style={styles.titleText}>Добро пожаловать, {userName}!</Text>
-                    <Text style={styles.subtitle}>Твой уровень: {userLevel}</Text>
+                    <Text style={styles.subtitle}>Твой уровень: {level}</Text>
                 </View>
             </View>
         </View>
