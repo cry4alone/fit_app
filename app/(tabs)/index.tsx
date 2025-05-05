@@ -1,75 +1,159 @@
+import React from 'react';
+import { View, Text, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import Calendar from '@/components/Calendar';
+import { Link } from 'expo-router';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
+import ProgressBar from '@/components/ProgressBar';
+import { AccountInfo } from '@/components/AccountInfo';
+import { Stats } from '@/components/Stats';
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+    const currentXP = 450;
+    const xpToNextLevel = 1000;
+    const progress = currentXP / xpToNextLevel;
+
+    return (
+        <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+            <View style={styles.container}>
+                <AccountInfo></AccountInfo>
+
+                <View style={styles.recommendationCard}>
+                    <Text style={styles.recommendationText}>Совет дня: Добавь в рацион больше зелени и воды!</Text>
+                </View>
+
+                <Stats></Stats>
+
+                <View style={styles.progressCard}>
+                    <Text style={styles.cardTitle}>Опыт</Text>
+                    <Text style={styles.xpText}>
+                        {currentXP} / {xpToNextLevel}
+                    </Text>
+                    <ProgressBar progress={progress} />
+                    <TouchableOpacity style={styles.addAction}>
+                        <Link href='/add-activity' asChild>
+                            <Text style={styles.addActionText}>+ Добавить активность</Text>
+                        </Link>
+                    </TouchableOpacity>
+                </View>
+
+                <Calendar></Calendar>
+
+                <View style={styles.achievementsContainer}>
+                    <Text style={styles.sectionTitle}>Твои достижения</Text>
+                    <View style={styles.achievementItem}>
+                        <Text>🏆 Первые шаги — 1000 шагов за день</Text>
+                    </View>
+                    <View style={styles.achievementItem}>
+                        <Text>🔥 Активность 5 дней подряд</Text>
+                    </View>
+                    <View style={styles.achievementItem}>
+                        <Text>🏅 Начальный уровень завершён</Text>
+                    </View>
+                </View>
+
+                <Link href='/achievements' asChild>
+                    <TouchableOpacity style={styles.navButton}>
+                        <Text style={styles.navButtonText}>Все достижения</Text>
+                    </TouchableOpacity>
+                </Link>
+            </View>
+        </ScrollView>
+    );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    container: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#f5f5f5',
+    },
+    scrollContent: {
+        paddingBottom: 40,
+    },
+    motivationCard: {
+        backgroundColor: '#e8f5e9',
+        padding: 16,
+        borderRadius: 10,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#c8e6c9',
+    },
+    motivationText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#2e7d32',
+    },
+    progressCard: {
+        backgroundColor: '#fff',
+        padding: 16,
+        borderRadius: 10,
+        marginBottom: 20,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 1,
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    xpText: {
+        marginBottom: 8,
+        fontSize: 16,
+    },
+    addAction: {
+        backgroundColor: '#007AFF',
+        paddingVertical: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    addActionText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    achievementsContainer: {
+        marginBottom: 20,
+    },
+    sectionTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    achievementItem: {
+        backgroundColor: '#fff',
+        padding: 12,
+        marginBottom: 8,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#eee',
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 1,
+    },
+    navButton: {
+        backgroundColor: '#007AFF',
+        paddingVertical: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    navButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    recommendationCard: {
+        backgroundColor: '#fff3cd',
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#ffe69c',
+    },
+    recommendationText: {
+        fontSize: 14,
+        color: '#856404',
+    },
 });
